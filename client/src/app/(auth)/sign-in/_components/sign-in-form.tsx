@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import InputPassword from "./input-pass";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
+import { useMutation } from "@apollo/client";
+import postOperations from "@/graphql/operations/post";
 
 const FormSchema = z.object({
   email: z.string().min(2, {
@@ -21,6 +23,10 @@ const FormSchema = z.object({
 });
 
 export function SignInForm() {
+  const [createPost, { data, loading, error }] = useMutation(
+    postOperations.Mutations.createPost
+  );
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -29,8 +35,12 @@ export function SignInForm() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);
+
+    const { email: title, password: username } = data;
+
+    await createPost({ variables: { title, username } });
   }
 
   return (

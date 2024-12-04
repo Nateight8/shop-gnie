@@ -2,13 +2,7 @@ import { prisma } from "../../db.js";
 const resolvers = {
     Mutation: {
         createPost: async (_parent, args) => {
-            const post = await prisma.post.create({
-                data: {
-                    title: args.title,
-                    username: args.username,
-                },
-            });
-            return post;
+            console.log(args);
         },
     },
     Query: {
