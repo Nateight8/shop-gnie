@@ -1,7 +1,15 @@
+import { auth } from "@/auth";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import { PropsWithChildren } from "react";
 
-export default function Layout({ children }: PropsWithChildren) {
+export default async function Layout({ children }: PropsWithChildren) {
+  const session = await auth();
+
+  if (session) {
+    return redirect("/");
+  }
+
   return (
     <div className="h-screen py-8 px-4">
       <div className=" grid gap-4 grid-cols-1 h-full lg:grid-cols-[38.2fr_61.8fr] P-8">
